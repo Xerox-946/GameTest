@@ -1,0 +1,88 @@
+{
+  "1": [
+    {
+      "methodName": "DoTaskList",
+      "args": [
+        "login",
+        "greenHorn",
+        "upgradeBuildTech",
+        "makeArmy"
+      ]
+    },
+    {
+      "methodName": "HeartSync",
+      "args": []
+    }
+  ],
+  "2": [
+    {
+      "methodName": "DoTaskList",
+      "args": [
+        "login",
+        "attackResource"
+      ]
+    },
+    {
+      "methodName": "HeartSync",
+      "args": []
+    }
+  ],
+  "3": [
+    {
+      "methodName": "DoTaskList",
+      "args": [
+        "login",
+        "restoreStatus"
+      ]
+    },
+    {
+      "methodName": "CityAction",
+      "args": [
+        17,
+        150
+      ]
+    },
+    {
+      "methodName": "HeartSync",
+      "args": []
+    }
+  ],
+  "4": [
+    {
+      "methodName": "DoTaskList",
+      "args": [
+        "login",
+        "restoreStatus"
+      ]
+    },
+    {
+      "methodName": "CityAction",
+      "args": [
+        14,
+        150
+      ]
+    },
+    {
+      "methodName": "HeartSync",
+      "args": []
+    }
+  ],
+  "5": [
+    {
+      "methodName": "DoTaskList",
+      "args": [
+        "login"
+      ]
+    },
+    {
+      "methodName": "CityAction",
+      "args": [
+        12
+      ]
+    },
+    {
+      "methodName": "HeartSync",
+      "args": []
+    }
+  ]
+}

@@ -1,0 +1,277 @@
+{
+  "Normal": [
+    {
+      "methodName": "Login",
+      "args": []
+    },
+    {
+      "methodName": "DevAddCoin",
+      "args": [
+        "Food",
+        5
+      ]
+    },
+    {
+      "methodName": "DevFinishTrend",
+      "args": []
+    },
+    {
+      "methodName": "ResetTrend",
+      "args": []
+    },
+    {
+      "methodName": "ReloadBandit",
+      "args": [
+        0
+      ]
+    },
+    {
+      "methodName": "ResetHeroCareer",
+      "args": []
+    },
+    {
+      "methodName": "SendSysTemMail",
+      "args": [
+        "RemoveMember",
+        [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          1066,
+          1073,
+          8,
+          9,
+          19
+        ],
+        {
+          "Coin": {
+            "MinGold": 20
+          }
+        },
+        {}
+      ]
+    },
+    {
+      "methodName": "SendSysTemMsg",
+      "args": [
+        0,
+        "Lottery",
+        {
+          "RoleName": "test",
+          "HeroID": 7
+        },
+        1
+      ]
+    },
+    {
+      "methodName": "ClearChatInfo",
+      "args": [
+        1,
+        0
+      ]
+    },
+    {
+      "methodName": "DevSendChat",
+      "args": [
+        1073,
+        4,
+        1066,
+        0,
+        "TestTest"
+      ]
+    },
+    {
+      "methodName": "AcceptSerial",
+      "args": [
+        1073,
+        3
+      ]
+    },
+    {
+      "methodName": "AcceptTask",
+      "args": [
+        3
+      ]
+    },
+    {
+      "methodName": "ClearRedis",
+      "args": [
+        null
+      ]
+    },
+    {
+      "methodName": "GetRoleCityInfo",
+      "args": []
+    },
+    {
+      "methodName": "CityRecycle",
+      "args": [
+        19,
+        "CityRecycleB"
+      ]
+    },
+    {
+      "methodName": "ReloadFactionSimpleInfo",
+      "args": [
+        1
+      ]
+    },
+    {
+      "methodName": "ReloadFactionTask",
+      "args": [
+        1
+      ]
+    },
+    {
+      "methodName": "ResetSerial",
+      "args": [
+        1
+      ]
+    },
+    {
+      "methodName": "ReloadWorldEntity",
+      "args": []
+    },
+    {
+      "methodName": "ChangeCityFaction",
+      "args": [
+        [
+          1,
+          2,
+          3
+        ],
+        1
+      ]
+    },
+    {
+      "methodName": "DevReviseFogInfo",
+      "args": []
+    },
+    {
+      "methodName": "DevFLLog",
+      "args": [
+        1,
+        1
+      ]
+    },
+    {
+      "methodName": "DevAddItem",
+      "args": [
+        1073,
+        1,
+        1
+      ]
+    },
+    {
+      "methodName": "DevRoleExtend",
+      "args": []
+    },
+    {
+      "methodName": "DevUpdateFence",
+      "args": [
+        1
+      ]
+    },
+    {
+      "methodName": "DevSettleDutyTask",
+      "args": [
+        1
+      ]
+    },
+    {
+      "methodName": "DevMarch",
+      "args": [
+        1,
+        12,
+        1000
+      ]
+    },
+    {
+      "methodName": "DevReloadJob",
+      "args": [
+        1,
+        12,
+        1000
+      ]
+    },
+    {
+      "methodName": "DevPower",
+      "args": [
+        1073
+      ]
+    },
+    {
+      "methodName": "DevLoadCityLair",
+      "args": [
+        1
+      ]
+    },
+    {
+      "methodName": "DevFinishCityWar",
+      "args": [
+        1
+      ]
+    },
+    {
+      "methodName": "DevRoleExpireJob",
+      "args": []
+    },
+    {
+      "methodName": "DevAddEquip",
+      "args": [
+        7
+      ]
+    },
+    {
+      "methodName": "DevRecruit",
+      "args": [
+        7
+      ]
+    },
+    {
+      "methodName": "DevConscript",
+      "args": [
+        1073,
+        777
+      ]
+    },
+    {
+      "methodName": "ReloadRoleSimpleInfo",
+      "args": [
+        1073
+      ]
+    },
+    {
+      "methodName": "ReloadLeagueSimpleInfo",
+      "args": [
+        [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      ]
+    },
+    {
+      "methodName": "DevSetLockHero",
+      "args": [
+        1073
+      ]
+    },
+    {
+      "methodName": "HeartSync",
+      "args": []
+    },
+    {
+      "methodName": "DevUnlockFog",
+      "args": [
+        1
+      ]
+    }
+  ],
+  "Loop": []
+}

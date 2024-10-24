@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "axios": "^1.7.5",
+    "log4js": "^6.9.1",
+    "socket.io": "^4.7.5",
+    "socket.io-client": "^1.7.4",
+    "ws": "^8.18.0"
+  }
+}
