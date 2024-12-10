@@ -14,10 +14,11 @@ class GameSocket {
   _sequece;
   _seed;
   _messageCode;
-  _defaultErrHandle;
   _dataHandle;
   _requestTimestamps;
+  _requestIsCount;
   _responseTimes;
+  _defaultErrHandle;
   _dataUpdateHandler;
 
   constructor(Seed) {
@@ -27,7 +28,9 @@ class GameSocket {
     this._seed = Seed;
     this._responseTimes = { 0: 0 };
     this._requestTimestamps = new Map();
+    this._requestIsCount = new Map();
     this._dataUpdateHandler = async () => { };
+    this._defaultErrHandle = async () => { };
 
     process.on('SIGINT', () => {
       logger.warn(`捕获到 SIGINT (Ctrl+C)，准备断开 WebSocket 连接...`);
@@ -36,7 +39,7 @@ class GameSocket {
     });
   }
 
-  async Connect(Address, Token) {
+  async Connect(Address, Token, roleID) {
     this._address = Address ?? API_ROOT;
     this._token = Token;
     this._succHandlers = new Map();
@@ -49,7 +52,7 @@ class GameSocket {
 
       return new Promise((resolve, reject) => {
         Socket.onopen = () => {
-          this.OnOpen().then(() => {
+          this.OnOpen(roleID).then(() => {
             resolve();
           }).catch((err) => {
             reject(err);
@@ -72,14 +75,15 @@ class GameSocket {
 
   Close() {
     logger.warn("主动关闭Socket连接");
+    logger.warn(`Average Response totalTime:${this._responseTimes[0]}ms,totalSep:${(Object.keys(this._responseTimes).length - 1)},averageTime:${(this._responseTimes[0] / (Object.keys(this._responseTimes).length - 1))}ms`)
     this._isReconnect = false;
     // this._webSocket.close();
     this.OnDestroy();
   }
 
-  async OnOpen(res) {
+  async OnOpen(rid) {
     if (this._seed == 0 || this._seed == undefined) {
-      await this.SendLoginOrRegister();
+      await this.SendLoginOrRegister(rid);
     }
     logger.debug(this._seed + '   WebSocket已连接');
   }
@@ -108,10 +112,6 @@ class GameSocket {
     if (typeof data !== 'object' || Array.isArray(data)) return;
     if (!data.hasOwnProperty('Seq') || data.Seq === 0) {
       let msg = JSON.stringify(data);
-      // //返回部队状态
-      // if (data.Content.hasOwnProperty('RoleArmyVo')) {
-      //   logger.warn(JSON.stringify(data.Content.RoleArmyVo));
-      // }
       if (msg.length > 100) {
         msg = msg.slice(0, 50) + '...' + msg.slice(msg.length - 50);
       }
@@ -127,11 +127,13 @@ class GameSocket {
 
       // 可以在这里打印或记录到日志
       logger.info(`Response for seq ${data.Seq} took ${responseTime} ms`);
-
-      this._responseTimes[data.Seq] = responseTime;
-      this._responseTimes[0] += responseTime;
+      if (this._requestIsCount.get(data.Seq)) {
+        this._responseTimes[data.Seq] = responseTime;
+        this._responseTimes[0] += responseTime;
+      }
       // 清理时间戳
       this._requestTimestamps.delete(data.Seq);
+      this._requestIsCount.delete(data.Seq);
     }
     this._messageCode = data.Code;
     if (data.Code === 0) {
@@ -182,7 +184,7 @@ class GameSocket {
     }
   }
 
-  async Send({ Cmd, Params, Handler, ErrHandler }) {
+  async Send({ Cmd, Params, Immediate, Handler, ErrHandler }) {
     this._sequece++;
     const PureMessage = {
       Cmd,
@@ -193,6 +195,7 @@ class GameSocket {
     const Message = this._lastestMessage = PureMessage;
     const timestamp = Date.now();
     this._requestTimestamps.set(this._sequece, timestamp);
+    this._requestIsCount.set(this._sequece, Immediate ? true : false);
     if (this._webSocket && this._webSocket.readyState === 1) {
       logger.info(`Sending: `, JSON.stringify(PureMessage));
       if (Handler) this._succHandlers.set(this._sequece, Handler);
@@ -204,10 +207,10 @@ class GameSocket {
     }
   }
 
-  async SendLoginOrRegister() {
+  async SendLoginOrRegister(rid) {
     if (this._webSocket && this._webSocket.readyState === 1) {
       // const api = { Cmd: 'role.roleLogin', Params: { "FactionID": Math.floor(Math.random() * 6) + 1 }, Describe: '角色创建或登录' };
-      const api = { Cmd: 'role.roleLogin', Params: { "FactionID": 1 }, Describe: '角色创建或登录' };
+      const api = { Cmd: 'role.roleLogin', Params: { "FactionID": rid ? rid : Math.floor(Math.random() * 6) + 1 }, Describe: '角色创建或登录' };
       logger.info(
         `正在执行【${api.Describe.length > 0 ? api.Describe : api.Cmd}】... `
       );

@@ -14,6 +14,7 @@ const executeIndex = argv[0];
 const GroupName = argv[1];
 const TestNumStart = argv[2];
 var TestNumEnd = argv[3];
+const RoleID = argv[4];
 var args = [];
 const UserList = [];
 const logger = new GameLogger('Main');
@@ -42,7 +43,7 @@ const maxDelay = 1000; // 最大毫秒
     }
     for (let userName of list[GroupName]) {
       try {
-        const response = await game.gameHttp(config.serverUrl, "role.login", `{"UserID":'${userName}'}`);
+        const response = await game.gameHttp(config.loginUrl, "server.selectServer", `{"ServerID":4,"GUID":0,"plat_no":1,"plat_userID":'${userName}'}`);
         if (response && response.Code === 0) {
           const socketAdd = response.Content.SocketAdd;
           const token = response.Content.Token;
@@ -66,7 +67,7 @@ const maxDelay = 1000; // 最大毫秒
     }
 
     // 所有连接成功后再执行后续代码
-    await Execute[executeIndex].slice().forEach((item) => {
+    await Execute.filter(item => executeIndex == item.ID)[0].Normal.slice().forEach((item) => {
       args.push(item.methodName);
       item.args.forEach((item1) => {
         args.push(item1);
@@ -129,7 +130,6 @@ const maxDelay = 1000; // 最大毫秒
         j += 1;
       }
 
-
       // let currentBatchIndex = 0;
       // const executeNextBatch = () => {
       //     const currentBatchSize = Math.min(batchSize, UserList.length - currentBatchIndex);
@@ -177,7 +177,7 @@ const maxDelay = 1000; // 最大毫秒
 
 async function InitSocket(Socket, Address, Token) {
   try {
-    await Socket.Connect(Address, Token);
+    await Socket.Connect(Address, Token, RoleID);
   } catch (error) {
     logger.error('WebSocket connection failed:', error);
   }

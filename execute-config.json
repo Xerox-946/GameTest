@@ -1,88 +1,586 @@
-{
-  "1": [
-    {
-      "methodName": "DoTaskList",
-      "args": [
-        "login",
-        "greenHorn",
-        "upgradeBuildTech",
-        "makeArmy"
-      ]
-    },
-    {
-      "methodName": "HeartSync",
-      "args": []
-    }
-  ],
-  "2": [
-    {
-      "methodName": "DoTaskList",
-      "args": [
-        "login",
-        "attackResource"
-      ]
-    },
-    {
-      "methodName": "HeartSync",
-      "args": []
-    }
-  ],
-  "3": [
-    {
-      "methodName": "DoTaskList",
-      "args": [
-        "login",
-        "restoreStatus"
-      ]
-    },
-    {
-      "methodName": "CityAction",
-      "args": [
-        17,
-        150
-      ]
-    },
-    {
-      "methodName": "HeartSync",
-      "args": []
-    }
-  ],
-  "4": [
-    {
-      "methodName": "DoTaskList",
-      "args": [
-        "login",
-        "restoreStatus"
-      ]
-    },
-    {
-      "methodName": "CityAction",
-      "args": [
-        14,
-        150
-      ]
-    },
-    {
-      "methodName": "HeartSync",
-      "args": []
-    }
-  ],
-  "5": [
-    {
-      "methodName": "DoTaskList",
-      "args": [
-        "login"
-      ]
-    },
-    {
-      "methodName": "CityAction",
-      "args": [
-        12
-      ]
-    },
-    {
-      "methodName": "HeartSync",
-      "args": []
-    }
-  ]
-}
+[
+  {
+    "ID": 1,
+    "MethodInfo": "新手任务完成加资源和兵力补充完整",
+    "Normal": [
+      {
+        "methodName": "DoTaskList",
+        "args": [
+          "login",
+          "greenHorn",
+          "upgradeBuildTech",
+          "makeArmy"
+        ]
+      },
+      {
+        "methodName": "HeartSync",
+        "args": []
+      }
+    ]
+  },
+  {
+    "ID": 2,
+    "MethodInfo": "攻打资源地(默认临近地块)",
+    "Normal": [
+      {
+        "methodName": "GetMyRoleInfo",
+        "args": []
+      },
+      {
+        "methodName": "DoTaskList",
+        "args": [
+          "attackResource"
+        ]
+      },
+      {
+        "methodName": "HeartSync",
+        "args": []
+      }
+    ]
+  },
+  {
+    "ID": 3,
+    "MethodInfo": "驻守指定城市",
+    "Normal": [
+      {
+        "methodName": "DoTaskList",
+        "args": [
+          "login",
+          "restoreStatus"
+        ]
+      },
+      {
+        "methodName": "CityAction",
+        "args": [
+          17,
+          "180"
+        ]
+      },
+      {
+        "methodName": "HeartSync",
+        "args": []
+      }
+    ]
+  },
+  {
+    "ID": 4,
+    "MethodInfo": "攻占城池",
+    "Normal": [
+      {
+        "methodName": "DoTaskList",
+        "args": [
+          "login",
+          "restoreStatus"
+        ]
+      },
+      {
+        "methodName": "CityAction",
+        "args": [
+          "14"
+        ]
+      },
+      {
+        "methodName": "HeartSync",
+        "args": []
+      }
+    ]
+  },
+  {
+    "MethodInfo": "部队撤退",
+    "Normal": [
+      {
+        "methodName": "DoTaskList",
+        "args": [
+          "login"
+        ]
+      },
+      {
+        "methodName": "CityAction",
+        "args": [
+          "12"
+        ]
+      },
+      {
+        "methodName": "HeartSync",
+        "args": []
+      }
+    ],
+    "ID": 5
+  },
+  {
+    "MethodInfo": "测试新手",
+    "Normal": [
+      {
+        "methodName": "DoTaskList",
+        "args": [
+          "login",
+          "greenHorn"
+        ]
+      },
+      {
+        "methodName": "HeartSync",
+        "args": []
+      }
+    ],
+    "ID": 6
+  },
+  {
+    "MethodInfo": "测试建筑",
+    "Normal": [
+      {
+        "methodName": "DoTaskList",
+        "args": [
+          "updateAllBuild"
+        ]
+      },
+      {
+        "methodName": "HeartSync",
+        "args": []
+      }
+    ],
+    "ID": 7
+  },
+  {
+    "MethodInfo": "测试科技",
+    "Normal": [
+      {
+        "methodName": "DoTaskList",
+        "args": [
+          "updateAllTech"
+        ]
+      },
+      {
+        "methodName": "HeartSync",
+        "args": []
+      }
+    ],
+    "ID": 8
+  },
+  {
+    "MethodInfo": "测试道具",
+    "Normal": [
+      {
+        "methodName": "DoTaskList",
+        "args": [
+          "getUseItem"
+        ]
+      },
+      {
+        "methodName": "HeartSync",
+        "args": []
+      }
+    ],
+    "ID": 9
+  },
+  {
+    "MethodInfo": "测试上下阵",
+    "Normal": [
+      {
+        "methodName": "DoTaskList",
+        "args": [
+          "upDownArmy1"
+        ]
+      },
+      {
+        "methodName": "HeartSync",
+        "args": []
+      }
+    ],
+    "ID": 10
+  },
+  {
+    "ID": 11,
+    "MethodInfo": "攻占指定城池",
+    "Normal": [
+      {
+        "methodName": "DoTaskList",
+        "args": [
+          "login",
+          "restoreStatus"
+        ]
+      },
+      {
+        "methodName": "CityAction",
+        "args": [
+          "14",
+          180
+        ]
+      },
+      {
+        "methodName": "HeartSync",
+        "args": []
+      }
+    ]
+  },
+  {
+    "ID": 12,
+    "MethodInfo": "征兵",
+    "Normal": [
+      {
+        "methodName": "DoTaskList",
+        "args": [
+          "recruitSolider"
+        ]
+      },
+      {
+        "methodName": "HeartSync",
+        "args": []
+      }
+    ]
+  },
+  {
+    "ID": 13,
+    "MethodInfo": "抽卡",
+    "Normal": [
+      {
+        "methodName": "DoTaskList",
+        "args": [
+          "lotteryHero"
+        ]
+      },
+      {
+        "methodName": "HeartSync",
+        "args": []
+      }
+    ]
+  },
+  {
+    "ID": 14,
+    "MethodInfo": "升星",
+    "Normal": [
+      {
+        "methodName": "DoTaskList",
+        "args": [
+          "upStar"
+        ]
+      },
+      {
+        "methodName": "HeartSync",
+        "args": []
+      }
+    ]
+  },
+  {
+    "ID": 15,
+    "MethodInfo": "经验传授",
+    "Normal": [
+      {
+        "methodName": "DoTaskList",
+        "args": [
+          "releaseHero"
+        ]
+      },
+      {
+        "methodName": "HeartSync",
+        "args": []
+      }
+    ]
+  },
+  {
+    "ID": 16,
+    "MethodInfo": "加点",
+    "Normal": [
+      {
+        "methodName": "DevRecruit",
+        "args": [
+          1,
+          50
+        ]
+      },
+      {
+        "methodName": "AssignPoint",
+        "args": [
+          1
+        ]
+      },
+      {
+        "methodName": "HeartSync",
+        "args": []
+      }
+    ]
+  },
+  {
+    "ID": 17,
+    "MethodInfo": "觉醒",
+    "Normal": [
+      {
+        "methodName": "DevRecruit",
+        "args": [
+          301,
+          20
+        ]
+      },
+      {
+        "methodName": "DevRecruit",
+        "args": [
+          302,
+          1
+        ]
+      },
+      {
+        "methodName": "DevRecruit",
+        "args": [
+          303,
+          1
+        ]
+      },
+      {
+        "methodName": "RemakeHero",
+        "args": [
+          301,
+          302,
+          303
+        ]
+      },
+      {
+        "methodName": "HeartSync",
+        "args": []
+      }
+    ]
+  },
+  {
+    "ID": 18,
+    "MethodInfo": "武将传授",
+    "Normal": [
+      {
+        "methodName": "DevRecruit",
+        "args": [
+          300,
+          20
+        ]
+      },
+      {
+        "methodName": "SkillActivateSkill",
+        "args": [
+          300
+        ]
+      },
+      {
+        "methodName": "HeartSync",
+        "args": []
+      }
+    ]
+  },
+  {
+    "ID": 19,
+    "MethodInfo": "升级战法",
+    "Normal": [
+      {
+        "methodName": "GetMyRoleInfo",
+        "args": []
+      },
+      {
+        "methodName": "UpgradeSkill",
+        "args": [
+          340,
+          1
+        ]
+      },
+      {
+        "methodName": "UpgradeSkill",
+        "args": [
+          323,
+          1
+        ]
+      },
+      {
+        "methodName": "HeartSync",
+        "args": []
+      }
+    ]
+  },
+  {
+    "ID": 20,
+    "MethodInfo": "补兵",
+    "Normal": [
+      {
+        "methodName": "GetMyRoleInfo",
+        "args": []
+      },
+      {
+        "methodName": "AssignSolider",
+        "args": [
+          1
+        ]
+      },
+      {
+        "methodName": "HeartSync",
+        "args": []
+      }
+    ]
+  },
+  {
+    "ID": 21,
+    "MethodInfo": "变更阵型兵种",
+    "Normal": [
+      {
+        "methodName": "GetMyRoleInfo",
+        "args": []
+      },
+      {
+        "methodName": "ChangeFormation",
+        "args": [
+          1,
+          1
+        ]
+      },
+      {
+        "methodName": "ChangeArm",
+        "args": [
+          1,
+          1
+        ]
+      },
+      {
+        "methodName": "HeartSync",
+        "args": []
+      }
+    ]
+  },
+  {
+    "ID": 22,
+    "MethodInfo": "退治山贼",
+    "Normal": [
+      {
+        "methodName": "DoTaskList",
+        "args": [
+          "attackLan"
+        ]
+      },
+      {
+        "methodName": "HeartSync",
+        "args": []
+      }
+    ]
+  },
+  {
+    "ID": 23,
+    "MethodInfo": "激活扫荡的地",
+    "Normal": [
+      {
+        "methodName": "DoTaskList",
+        "args": [
+          "seekAnyResource"
+        ]
+      },
+      {
+        "methodName": "HeartSync",
+        "args": []
+      }
+    ]
+  },
+  {
+    "ID": 24,
+    "MethodInfo": "扫荡山贼",
+    "Normal": [
+      {
+        "methodName": "GetMyRoleInfo",
+        "args": []
+      },
+      {
+        "methodName": "WorldSweep",
+        "args": [
+          1,
+          1
+        ]
+      },
+      {
+        "methodName": "HeartSync",
+        "args": []
+      }
+    ]
+  },
+  {
+    "MethodInfo": "部队劫掠",
+    "Normal": [
+      {
+        "methodName": "DoTaskList",
+        "args": [
+          "login"
+        ]
+      },
+      {
+        "methodName": "ResourceAction",
+        "args": [
+          "26",
+          180
+        ]
+      },
+      {
+        "methodName": "HeartSync",
+        "args": []
+      }
+    ],
+    "ID": 25
+  },
+  {
+    "MethodInfo": "部队救援",
+    "Normal": [
+      {
+        "methodName": "DoTaskList",
+        "args": [
+          "login"
+        ]
+      },
+      {
+        "methodName": "ResourceAction",
+        "args": [
+          "41",
+          180
+        ]
+      },
+      {
+        "methodName": "HeartSync",
+        "args": []
+      }
+    ],
+    "ID": 26
+  },
+  {
+    "MethodInfo": "家宝操作",
+    "Normal": [
+      {
+        "methodName": "GetMyRoleInfo",
+        "args": []
+      },
+      {
+        "methodName": "DevAddEquip",
+        "args": [
+          1
+        ]
+      },
+      {
+        "methodName": "DevAddCoin",
+        "args": [
+          "Copper",
+          5000
+        ]
+      },
+      {
+        "methodName": "DevAddItem",
+        "args": [
+          28,
+          2
+        ]
+      },
+      {
+        "methodName": "DevAddItem",
+        "args": [
+          25,
+          1
+        ]
+      },
+      {
+        "methodName": "DoTaskList",
+        "args": [
+          "equipOperation"
+        ]
+      },
+      {
+        "methodName": "HeartSync",
+        "args": []
+      }
+    ],
+    "ID": 27
+  }
+]

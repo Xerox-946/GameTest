@@ -23,6 +23,10 @@ importers:
       ws:
         specifier: ^8.18.0
         version: 8.18.0
+    devDependencies:
+      workerpool:
+        specifier: ^9.2.0
+        version: 9.2.0
 
 packages:
 
@@ -275,6 +279,9 @@ packages:
   vary@1.1.2:
     resolution: {integrity: sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==}
     engines: {node: '>= 0.8'}
+
+  workerpool@9.2.0:
+    resolution: {integrity: sha512-PKZqBOCo6CYkVOwAxWxQaSF2Fvb5Iv2fCeTP7buyWI2GiynWr46NcXSgK/idoV6e60dgCBfgYc+Un3HMvmqP8w==}
 
   ws@1.1.5:
     resolution: {integrity: sha512-o3KqipXNUdS7wpQzBHSe180lBGO60SoK0yVo3CYJgb2MkobuWuBX6dhkYP5ORCLd55y+SaflMOV5fqAB53ux4w==}
@@ -604,6 +611,8 @@ snapshots:
   universalify@0.1.2: {}
 
   vary@1.1.2: {}
+
+  workerpool@9.2.0: {}
 
   ws@1.1.5:
     dependencies:

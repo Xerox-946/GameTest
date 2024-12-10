@@ -1,0 +1,321 @@
+[
+  {
+    "methodName": "Login",
+    "args": []
+  },
+  {
+    "methodName": "DevAddCoin",
+    "args": [
+      "Type",
+      "Num"
+    ]
+  },
+  {
+    "methodName": "DevFinishTrend",
+    "args": []
+  },
+  {
+    "methodName": "ResetTrend",
+    "args": []
+  },
+  {
+    "methodName": "ReloadBandit",
+    "args": [
+      "BanditID"
+    ]
+  },
+  {
+    "methodName": "ResetHeroCareer",
+    "args": []
+  },
+  {
+    "methodName": "SendSysTemMail",
+    "args": [
+      "Module",
+      "RoleList",
+      "Award",
+      "Param"
+    ]
+  },
+  {
+    "methodName": "SendSysTemMsg",
+    "args": [
+      "TargetID",
+      "Module",
+      "Param",
+      "All"
+    ]
+  },
+  {
+    "methodName": "ClearChatInfo",
+    "args": [
+      "ChatType",
+      "TargetID"
+    ]
+  },
+  {
+    "methodName": "DevSendChat",
+    "args": [
+      "RoleID",
+      "ChatType",
+      "ReceiverID",
+      "GroupID",
+      "Message"
+    ]
+  },
+  {
+    "methodName": "AcceptSerial",
+    "args": [
+      "RoleID",
+      "TaskSerialID"
+    ]
+  },
+  {
+    "methodName": "AcceptTask",
+    "args": [
+      "TaskID"
+    ]
+  },
+  {
+    "methodName": "ClearRedis",
+    "args": [
+      "Type"
+    ]
+  },
+  {
+    "methodName": "GetRoleCityInfo",
+    "args": []
+  },
+  {
+    "methodName": "CityRecycle",
+    "args": [
+      "RoleID",
+      "Type"
+    ]
+  },
+  {
+    "methodName": "ReloadFactionSimpleInfo",
+    "args": [
+      "FactionID"
+    ]
+  },
+  {
+    "methodName": "ReloadFactionTask",
+    "args": [
+      "Reset"
+    ]
+  },
+  {
+    "methodName": "ResetSerial",
+    "args": [
+      "RoleID",
+      "All"
+    ]
+  },
+  {
+    "methodName": "ReloadWorldEntity",
+    "args": []
+  },
+  {
+    "methodName": "ChangeCityFaction",
+    "args": [
+      "CityIDList",
+      "FactionID"
+    ]
+  },
+  {
+    "methodName": "DevReviseFogInfo",
+    "args": []
+  },
+  {
+    "methodName": "DevFLLog",
+    "args": [
+      "FactionID",
+      "LeagueID"
+    ]
+  },
+  {
+    "methodName": "DevAddItem",
+    "args": [
+      "RoleID",
+      "RoleID",
+      "Num"
+    ]
+  },
+  {
+    "methodName": "DevRoleExtend",
+    "args": []
+  },
+  {
+    "methodName": "DevUpdateFence",
+    "args": [
+      "isFull"
+    ]
+  },
+  {
+    "methodName": "DevSettleDutyTask",
+    "args": [
+      "OnlyCampaign"
+    ]
+  },
+  {
+    "methodName": "DevMarch",
+    "args": [
+      "DestPos",
+      "Status",
+      "DelayTime"
+    ]
+  },
+  {
+    "methodName": "DevReloadJob",
+    "args": [
+      "JobLogID"
+    ]
+  },
+  {
+    "methodName": "DevPower",
+    "args": [
+      "RoleID"
+    ]
+  },
+  {
+    "methodName": "DevLoadCityLair",
+    "args": [
+      "CityID"
+    ]
+  },
+  {
+    "methodName": "DevFinishCityWar",
+    "args": [
+      "CityID"
+    ]
+  },
+  {
+    "methodName": "DevRoleExpireJob",
+    "args": []
+  },
+  {
+    "methodName": "DevAddEquip",
+    "args": [
+      "EquipID"
+    ]
+  },
+  {
+    "methodName": "DevRecruit",
+    "args": [
+      "HeroID",
+      "Level"
+    ]
+  },
+  {
+    "methodName": "DevConscript",
+    "args": [
+      "RoleID",
+      "Soldiers"
+    ]
+  },
+  {
+    "methodName": "ReloadRoleSimpleInfo",
+    "args": [
+      "RoleID"
+    ]
+  },
+  {
+    "methodName": "ReloadLeagueSimpleInfo",
+    "args": [
+      "LeagueIDList"
+    ]
+  },
+  {
+    "methodName": "DevSetLockHero",
+    "args": [
+      "RoleID"
+    ]
+  },
+  {
+    "methodName": "HeartSync",
+    "args": []
+  },
+  {
+    "methodName": "DoTaskList",
+    "args": [
+      "Params"
+    ]
+  },
+  {
+    "methodName": "CityAction",
+    "args": [
+      "Status",
+      "CityID"
+    ]
+  },
+  {
+    "methodName": "ResourceAction",
+    "args": [
+      "Status",
+      "CityID"
+    ]
+  },
+  {
+    "methodName": "SkillActivateSkill",
+    "args": [
+      "HeroID"
+    ]
+  },
+  {
+    "methodName": "GetMyRoleInfo",
+    "args": []
+  },
+  {
+    "methodName": "AttackAnyResource",
+    "args": []
+  },
+  {
+    "methodName": "RemakeHero",
+    "args": [
+      "HeroID",
+      "HeroID1",
+      "HeroID2"
+    ]
+  },
+  {
+    "methodName": "UpgradeSkill",
+    "args": [
+      "HeroID",
+      "Pos"
+    ]
+  },
+  {
+    "methodName": "WorldSweep",
+    "args": [
+      "ArmyID",
+      "Level"
+    ]
+  },
+  {
+    "methodName": "AssignSolider",
+    "args": [
+      "ArmyID"
+    ]
+  },
+  {
+    "methodName": "ChangeArm",
+    "args": [
+      "ArmyID",
+      "ArmyType"
+    ]
+  },
+  {
+    "methodName": "ChangeFormation",
+    "args": [
+      "ArmyID",
+      "FormationID"
+    ]
+  },
+  {
+    "methodName": "AssignPoint",
+    "args": [
+      "HeroID"
+    ]
+  }
+]

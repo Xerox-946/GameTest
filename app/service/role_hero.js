@@ -22,10 +22,22 @@ class RoleHeroService extends CoreService {
       return item.HeroID === HeroID;
     })
   }
+  
+  OneByOtherHeroID(HeroID) {
+    if (!Array.isArray(this._roleHeroList) || this._roleHeroList.length === 0) return;
+    return this._roleHeroList.slice().reverse().find(item => {
+      return item.HeroID === HeroID;
+    })
+  }
 
   GetRoleHeroID(HeroID) {
     // this.logger.debug(JSON.stringify(this._roleHeroList));
     return this.OneByHeroID(HeroID).RoleHeroID;
+  }
+
+  GetOtherRoleHeroID(HeroID) {
+    // this.logger.debug(JSON.stringify(this._roleHeroList));
+    return this.OneByOtherHeroID(HeroID).RoleHeroID;
   }
 
   AddHeroInfo(data) {

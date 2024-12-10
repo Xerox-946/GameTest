@@ -208,6 +208,12 @@ class ServiceManager {
     return this.GetNextCityID() * 100;
   }
 
+  GetSecondResource() {
+    const factionID = this.role.GetFactionID();
+    const cities = FactionToCity[factionID];
+    return cities[1] * 100 + 26;
+  }
+
   GetCurStatus() {
     const belongFactionID = this.worldCity.GetFactionID(this.GetNextCityID());
     if (belongFactionID != 99 && belongFactionID != this.role.GetFactionID()) {

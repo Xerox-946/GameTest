@@ -16,12 +16,22 @@ class RoleItemService extends CoreService{
     return this._roleItemList;
   }
 
+  GetRoleItemID(ItemID) {
+    return this.OneByItemID(ItemID)?.RoleItemID;
+  }
+
   OneByItemID(ItemID)
   {
     if (! Array.isArray(this._roleItemList) || this._roleItemList.length === 0) return;
     return this._roleItemList.find(item => {
       return item.ItemID === ItemID;
     })
+  }
+
+  AddItemInfo(data) {
+    if (data.hasOwnProperty('RoleItemVo')) {
+      this._roleItemList.push(data.RoleItemVo);
+    }
   }
 }
 

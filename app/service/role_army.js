@@ -66,6 +66,21 @@ class RoleArmyService extends CoreService {
     });
   }
 
+  async OnArmyCallback(data) {
+    if (data.hasOwnProperty("RoleArmyVo")) {
+      if (Array.isArray(data.RoleArmyVo)) {
+        let max = 0;
+        for (let roleArmy of data.RoleArmyVo) {
+          if (max < roleArmy.EndTime - roleArmy.StartTime) {
+            max = roleArmy.EndTime - roleArmy.StartTime;
+          }
+        }
+        this.SetDelay(max);
+      } else {
+        this.SetDelay(data.RoleArmyVo.EndTime - data.RoleArmyVo.StartTime);
+      }
+    }
+  }
 }
 
 module.exports = RoleArmyService;

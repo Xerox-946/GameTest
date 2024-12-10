@@ -5,6 +5,7 @@ const fs = require("fs");
 const GameLogger = require("../utils/logger");
 const { Logger } = require("log4js");
 const ErrCode = require("./sysdata/sys_lan_err.json");
+const { WorkerManager } = require("./worker-manager");
 
 class Client {
   #SocketHandler;
@@ -21,7 +22,7 @@ class Client {
     this.#SocketHandler = socket;
     this.Seq = 1;
     this.IsContinue = true;
-    this.OrderList = Execute[index].slice();
+    this.OrderList = Execute.filter(item => index == item.ID)[0].Normal.slice();
   }
 
   // 初始化执行列表
@@ -30,306 +31,362 @@ class Client {
   //   // this.LoopOrderList = ["PlayerAction_RollDice", "PlayerAction_DoneIndex"];
   // }
 
-  DevAddCoin(type, num) {
+  async DevAddCoin(type, num) {
     const api = { Cmd: 'dev.devAddCoin', Params: { "Type": type, "Num": num }, Describe: '增加资源' };
-    this.DoTask(api, this.#ServiceManager.roleCoin.Init.bind(this.#ServiceManager.roleCoin)).then(() => {
+    await this.DoTask(api, this.#ServiceManager.roleCoin.Init.bind(this.#ServiceManager.roleCoin)).then(async () => {
+      await this.WaitForResponse(api.Cmd);
     }).catch((error) => {
       this.logger.error(error);
     });
   }
 
-  DevFinishTrend() {
+  async DevFinishTrend() {
     const api = { Cmd: 'dev.devFinishTrend', Params: {}, Describe: '结束当前章节，开启下一章节' };
-    this.DoTask(api, this.#ServiceManager.trendStruct.Init.bind(this.#ServiceManager.trendStruct)).then(() => {
+    await this.DoTask(api, this.#ServiceManager.trendStruct.Init.bind(this.#ServiceManager.trendStruct)).then(async () => {
+      await this.WaitForResponse(api.Cmd);
     }).catch((error) => {
       this.logger.error(error);
     });
   }
 
-  ResetTrend() {
+  async ResetTrend() {
     const api = { Cmd: 'dev.resetTrend', Params: {}, Describe: '重置天下布武章节信息' };
-    this.DoTask(api).then(() => {
+    await this.DoTask(api).then(async () => {
+      await this.WaitForResponse(api.Cmd);
     }).catch((error) => {
       this.logger.error(error);
     });
   }
 
-  ReloadBandit(banditID) {
+  async ReloadBandit(banditID) {
     const api = { Cmd: 'dev.reloadBandit', Params: { "BanditID": banditID }, Describe: '重载游荡怪物信息' };
-    this.DoTask(api).then(() => {
+    await this.DoTask(api).then(async () => {
+      await this.WaitForResponse(api.Cmd);
     }).catch((error) => {
       this.logger.error(error);
     });
   }
 
-  ResetHeroCareer() {
+  async ResetHeroCareer() {
     const api = { Cmd: 'dev.resetHeroCareer', Params: {}, Describe: '重置所有角色武将职业与武将默认职业不同的武将职业(职业解锁消耗直接移除)' };
-    this.DoTask(api).then(() => {
+    await this.DoTask(api).then(async () => {
+      await this.WaitForResponse(api.Cmd);
     }).catch((error) => {
       this.logger.error(error);
     });
   }
 
   //TODO 尚未验证
-  SendSysTemMail(module, roleList, award, param) {
+  async SendSysTemMail(module, roleList, award, param) {
     const api = { Cmd: 'dev.sendSysTemMail', Params: { "Module": module, "RoleList": roleList, "Award": award, "Param": param }, Describe: '系统邮件发送' };
-    this.DoTask(api).then(() => {
+    await this.DoTask(api).then(async () => {
+      await this.WaitForResponse(api.Cmd);
     }).catch((error) => {
       this.logger.error(error);
     });
   }
 
-  SendSysTemMsg(targetID, module, param, all) {
+  async SendSysTemMsg(targetID, module, param, all) {
     const api = { Cmd: 'dev.sendSysTemMsg', Params: { "TargetID": targetID, "Module": module, "Param": param, "All": all }, Describe: '消息提醒发送' };
-    this.DoTask(api).then(() => {
+    await this.DoTask(api).then(async () => {
+      await this.WaitForResponse(api.Cmd);
     }).catch((error) => {
       this.logger.error(error);
     });
   }
 
-  ClearChatInfo(chatType, targetID) {
+  async ClearChatInfo(chatType, targetID) {
     const api = { Cmd: 'dev.clearChatInfo', Params: { "ChatType": chatType, "TargetID": targetID }, Describe: '清理当前角色的指定聊天类型信息' };
-    this.DoTask(api).then(() => {
+    await this.DoTask(api).then(async () => {
+      await this.WaitForResponse(api.Cmd);
     }).catch((error) => {
       this.logger.error(error);
     });
   }
 
-  DevSendChat(roleID, chatType, receiverID, groupID, message) {
+  async DevSendChat(roleID, chatType, receiverID, groupID, message) {
     const api = { Cmd: 'dev.devSendChat', Params: { "RoleID": roleID, "ChatType": chatType, "ReceiverID": receiverID, "Message": message, "GroupID": groupID }, Describe: '聊天信息发送' };
-    this.DoTask(api).then(() => {
+    await this.DoTask(api).then(async () => {
+      await this.WaitForResponse(api.Cmd);
     }).catch((error) => {
       this.logger.error(error);
     });
   }
 
-  AcceptSerial(roleID, taskSerialID) {
+  async AcceptSerial(roleID, taskSerialID) {
     const api = { Cmd: 'dev.acceptSerial', Params: { "RoleID": roleID, "TaskSerialID": taskSerialID }, Describe: '接收指定章节任务' };
-    this.DoTask(api, [this.#ServiceManager.roleTaskSerial.Init.bind(this.#ServiceManager.roleTaskSerial), this.#ServiceManager.roleTask.Init.bind(this.#ServiceManager.roleTask)]).then(() => {
+    await this.DoTask(api, [this.#ServiceManager.roleTaskSerial.Init.bind(this.#ServiceManager.roleTaskSerial), this.#ServiceManager.roleTask.Init.bind(this.#ServiceManager.roleTask)]).then(async () => {
+      await this.WaitForResponse(api.Cmd);
     }).catch((error) => {
       this.logger.error(error);
     });
   }
 
-  AcceptTask(taskID) {
+  async AcceptTask(taskID) {
     const api = { Cmd: 'dev.acceptTask', Params: { "TaskID": taskID }, Describe: '接收支线任务' };
-    this.DoTask(api, this.#ServiceManager.roleTask.Init.bind(this.#ServiceManager.roleTask)).then(() => {
+    await this.DoTask(api, this.#ServiceManager.roleTask.Init.bind(this.#ServiceManager.roleTask)).then(async () => {
+      await this.WaitForResponse(api.Cmd);
     }).catch((error) => {
       this.logger.error(error);
     });
   }
 
-  ClearRedis(type) {
+  async ClearRedis(type) {
     const api = { Cmd: 'dev.clearRedis', Params: { "Type": type }, Describe: '清理指定类型的Redis信息' };
-    this.DoTask(api).then(() => {
+    await this.DoTask(api).then(async () => {
+      await this.WaitForResponse(api.Cmd);
     }).catch((error) => {
       this.logger.error(error);
     });
   }
 
-  GetRoleCityInfo() {
+  async GetRoleCityInfo() {
     const api = { Cmd: 'dev.getRoleCityInfo', Params: {}, Describe: '获取角色主城相关信息(包含一揆、村民事件信息)' };
-    this.DoTask(api, this.#ServiceManager.roleCity.Init.bind(this.#ServiceManager.roleCity)).then(() => {
+    await this.DoTask(api, this.#ServiceManager.roleCity.Init.bind(this.#ServiceManager.roleCity)).then(async () => {
+      await this.WaitForResponse(api.Cmd);
     }).catch((error) => {
       this.logger.error(error);
     });
   }
 
-  CityRecycle(roleID, type) {
+  async CityRecycle(roleID, type) {
     const api = { Cmd: 'dev.cityRecycle', Params: { "RoleID": roleID, "Type": type }, Describe: '基地回收' };
-    this.DoTask(api).then(() => {
+    await this.DoTask(api).then(async () => {
+      await this.WaitForResponse(api.Cmd);
     }).catch((error) => {
       this.logger.error(error);
     });
   }
 
-  ReloadFactionSimpleInfo(factionID) {
+  async ReloadFactionSimpleInfo(factionID) {
     const api = { Cmd: 'dev.reloadFactionSimpleInfo', Params: { "FactionID": factionID }, Describe: '重载指定势力的简易结构' };
-    this.DoTask(api, this.#ServiceManager.simpleStruct.UpdateInfo.bind(this.#ServiceManager.simpleStruct)).then(() => {
+    await this.DoTask(api, this.#ServiceManager.simpleStruct.UpdateInfo.bind(this.#ServiceManager.simpleStruct)).then(async () => {
+      await this.WaitForResponse(api.Cmd);
     }).catch((error) => {
       this.logger.error(error);
     });
   }
 
-  ReloadFactionTask(reset) {
+  async ReloadFactionTask(reset) {
     const api = { Cmd: 'dev.reloadFactionTask', Params: { "Reset": reset }, Describe: '重置势力章节任务' };
-    this.DoTask(api).then(() => {
+    await this.DoTask(api).then(async () => {
+      await this.WaitForResponse(api.Cmd);
     }).catch((error) => {
       this.logger.error(error);
     });
   }
 
-  ResetSerial(reset) {
+  async ResetSerial(reset) {
     const api = { Cmd: 'dev.resetSerial', Params: { "Reset": reset }, Describe: '重置章节任务' };
-    this.DoTask(api).then(() => {
+    await this.DoTask(api).then(async () => {
+      await this.WaitForResponse(api.Cmd);
     }).catch((error) => {
       this.logger.error(error);
     });
   }
 
-  ReloadWorldEntity() {
+  async ReloadWorldEntity() {
     const api = { Cmd: 'dev.reloadWorldEntity', Params: {}, Describe: '重置WorldEntity数据' };
-    this.DoTask(api).then(() => {
+    await this.DoTask(api).then(async () => {
+      await this.WaitForResponse(api.Cmd);
     }).catch((error) => {
       this.logger.error(error);
     });
   }
 
-  ChangeCityFaction(cityIDList, factionID) {
+  async ChangeCityFaction(cityIDList, factionID) {
     const api = { Cmd: 'dev.changeCityFaction', Params: { "CityIDList": cityIDList, "FactionID": factionID }, Describe: '设置指定城市归属于指定势力' };
-    this.DoTask(api).then(() => {
+    await this.DoTask(api).then(async () => {
+      await this.WaitForResponse(api.Cmd);
     }).catch((error) => {
       this.logger.error(error);
     });
   }
 
-  DevReviseFogInfo() {
+  async DevReviseFogInfo() {
     const api = { Cmd: 'dev.devReviseFogInfo', Params: {}, Describe: '修正迷雾数据的格式' };
-    this.DoTask(api).then(() => {
+    await this.DoTask(api).then(async () => {
+      await this.WaitForResponse(api.Cmd);
     }).catch((error) => {
       this.logger.error(error);
     });
   }
 
-  DevFLLog(factionID, leagueID) {
+  async DevFLLog(factionID, leagueID) {
     const api = { Cmd: 'dev.devFLLog', Params: { "FactionID": factionID, "LeagueID": leagueID }, Describe: '生成势力军团日志(非规范数据,所有信息使用1填充)' };
-    this.DoTask(api).then(() => {
+    await this.DoTask(api).then(async () => {
+      await this.WaitForResponse(api.Cmd);
     }).catch((error) => {
       this.logger.error(error);
     });
   }
 
-  DevAddItem(roleID, itemID, num) {
-    const api = { Cmd: 'dev.devAddItem', Params: { "RoleID": roleID, "ItemID": itemID, "Num": num }, Describe: '增加玩家道具' };
-    this.DoTask(api, this.#ServiceManager.roleItem.Init.bind(this.#ServiceManager.roleItem)).then(() => {
+  async DevAddItem(itemID, num) {
+    const api = { Cmd: 'dev.devAddItem', Params: { "ItemID": itemID, "Num": num }, Describe: '增加玩家道具' };
+    await this.DoTask(api, this.#ServiceManager.roleItem.Init.bind(this.#ServiceManager.roleItem)).then(async () => {
+      await this.WaitForResponse(api.Cmd);
     }).catch((error) => {
       this.logger.error(error);
     });
   }
 
-  DevRoleExtend() {
+  async DevRoleExtend() {
     const api = { Cmd: 'dev.devRoleExtend', Params: {}, Describe: '修正扩展信息(代官加成信息格式)' };
-    this.DoTask(api).then(() => {
+    await this.DoTask(api).then(async () => {
+      await this.WaitForResponse(api.Cmd);
     }).catch((error) => {
       this.logger.error(error);
     });
   }
 
-  DevUpdateFence(isFull) {
+  async DevUpdateFence(isFull) {
     const api = { Cmd: 'dev.devUpdateFence', Params: { "IsFull": isFull }, Describe: '修改城市围城值' };
-    this.DoTask(api).then(() => {
+    await this.DoTask(api).then(async () => {
+      await this.WaitForResponse(api.Cmd);
     }).catch((error) => {
       this.logger.error(error);
     });
   }
 
-  DevSettleDutyTask(onlyCampaign) {
+  async DevSettleDutyTask(onlyCampaign) {
     const api = { Cmd: 'dev.devSettleDutyTask', Params: { "OnlyCampaign": onlyCampaign }, Describe: '结算役职活动' };
-    this.DoTask(api).then(() => {
+    await this.DoTask(api).then(async () => {
+      await this.WaitForResponse(api.Cmd);
     }).catch((error) => {
       this.logger.error(error);
     });
   }
 
-  DevMarch(destpos, status, delayTime) {
+  async DevMarch(destpos, status, delayTime) {
     const api = { Cmd: 'dev.devMarch', Params: { "DestPos": destpos, "Status": status, "DelayTime": delayTime }, Describe: '测试行军' };
-    this.DoTask(api).then(() => {
+    await this.DoTask(api).then(async () => {
+      await this.WaitForResponse(api.Cmd);
     }).catch((error) => {
       this.logger.error(error);
     });
   }
 
-  DevReloadJob(jobLogID) {
+  async DevReloadJob(jobLogID) {
     const api = { Cmd: 'dev.devReloadJob', Params: { "JobLogID": jobLogID }, Describe: '重新加载指定定时任务' };
-    this.DoTask(api).then(() => {
+    await this.DoTask(api).then(async () => {
+      await this.WaitForResponse(api.Cmd);
     }).catch((error) => {
       this.logger.error(error);
     });
   }
 
-  DevPower(roleID) {
+  async DevPower(roleID) {
     const api = { Cmd: 'dev.devPower', Params: { "RoleID": roleID }, Describe: '重载战力' };
-    this.DoTask(api).then(() => {
+    await this.DoTask(api).then(async () => {
+      await this.WaitForResponse(api.Cmd);
     }).catch((error) => {
       this.logger.error(error);
     });
   }
 
-  DevLoadCityLair(cityID) {
+  async DevLoadCityLair(cityID) {
     const api = { Cmd: 'dev.devLoadCityLair', Params: { "CityID": cityID }, Describe: '重载指定城市的守军部队' };
-    this.DoTask(api).then(() => {
+    await this.DoTask(api).then(async () => {
+      await this.WaitForResponse(api.Cmd);
     }).catch((error) => {
       this.logger.error(error);
     });
   }
 
-  DevFinishCityWar(cityID) {
+  async DevFinishCityWar(cityID) {
     const api = { Cmd: 'dev.devFinishCityWar', Params: { "CityID": cityID }, Describe: '结束指定城市的城战并发送城战日志' };
-    this.DoTask(api).then(() => {
+    await this.DoTask(api).then(async () => {
+      await this.WaitForResponse(api.Cmd);
     }).catch((error) => {
       this.logger.error(error);
     });
   }
 
-  DevRoleExpireJob() {
+  async DevRoleExpireJob() {
     const api = { Cmd: 'dev.devRoleExpireJob', Params: {}, Describe: '重新加载玩家的过期定时任务' };
-    this.DoTask(api).then(() => {
+    await this.DoTask(api).then(async () => {
+      await this.WaitForResponse(api.Cmd);
     }).catch((error) => {
       this.logger.error(error);
     });
   }
 
-  DevAddEquip(equipID) {
+  async DevAddEquip(equipID) {
     const api = { Cmd: 'dev.devAddEquip', Params: { "EquipID": equipID }, Describe: '增加家宝' };
-    this.DoTask(api).then(() => {
+    await this.DoTask(api, this.#ServiceManager.roleEquip.AddEquipInfo.bind(this.#ServiceManager.roleEquip)).then(async () => {
+      await this.WaitForResponse(api.Cmd);
     }).catch((error) => {
       this.logger.error(error);
     });
   }
 
-  DevRecruit(heroID) {
-    const api = { Cmd: 'dev.devRecruit', Params: { "HeroID": heroID }, Describe: '招募指定武将' };
-    this.DoTask(api).then(() => {
+  async DevRecruit(heroID, level) {
+    const api = { Cmd: 'dev.devRecruit', Params: { "HeroID": heroID, "Level": level }, Describe: '招募指定武将' };
+    await this.DoTask(api, this.#ServiceManager.roleHero.AddHeroInfo.bind(this.#ServiceManager.roleHero)).then(async () => {
+      await this.WaitForResponse(api.Cmd);
     }).catch((error) => {
       this.logger.error(error);
     });
   }
 
-  DevConscript(roleID, soldiers) {
+  async DevConscript(roleID, soldiers) {
     const api = { Cmd: 'dev.devConscript', Params: { "RoleID": roleID, "Soldiers": soldiers }, Describe: '征兵' };
-    this.DoTask(api).then(() => {
+    await this.DoTask(api).then(async () => {
+      await this.WaitForResponse(api.Cmd);
     }).catch((error) => {
       this.logger.error(error);
     });
   }
 
-  ReloadRoleSimpleInfo(roleID) {
+  async ReloadRoleSimpleInfo(roleID) {
     const api = { Cmd: 'dev.reloadRoleSimpleInfo', Params: { "RoleID": roleID }, Describe: '重载角色的简易结构' };
-    this.DoTask(api).then(() => {
+    await this.DoTask(api).then(async () => {
+      await this.WaitForResponse(api.Cmd);
     }).catch((error) => {
       this.logger.error(error);
     });
   }
 
-  ReloadLeagueSimpleInfo(leagueIDList) {
+  async ReloadLeagueSimpleInfo(leagueIDList) {
     const api = { Cmd: 'dev.reloadLeagueSimpleInfo', Params: { "LeagueIDList": leagueIDList }, Describe: '重载指定家族的简易结构' };
-    this.DoTask(api).then(() => {
+    await this.DoTask(api).then(async () => {
+      await this.WaitForResponse(api.Cmd);
     }).catch((error) => {
       this.logger.error(error);
     });
   }
 
-  DevSetLockHero(roleID) {
+  async DevSetLockHero(roleID) {
     const api = { Cmd: 'dev.devSetLockHero', Params: { "RoleID": roleID }, Describe: '重载指定玩家的武将繁忙（委任中、上阵中等）信息' };
-    this.DoTask(api).then(() => {
+    await this.DoTask(api).then(async () => {
+      await this.WaitForResponse(api.Cmd);
     }).catch((error) => {
       this.logger.error(error);
     });
   }
 
-  DevUnlockFog(roleID) {
+  async DevUnlockFog(roleID) {
     const api = { Cmd: 'dev.devUnlockFog', Params: { "RoleID": roleID }, Describe: '指定玩家解锁所有迷雾' };
-    this.DoTask(api).then(() => {
+    await this.DoTask(api).then(async () => {
+      await this.WaitForResponse(api.Cmd);
+    }).catch((error) => {
+      this.logger.error(error);
+    });
+  }
+
+  async GetMyRoleInfo() {
+    const api = { Cmd: 'role.getMyRoleInfo', Params: {}, Describe: '获取当前玩家信息' };
+    await this.DoTask(api).then(async () => {
+      await this.WaitForResponse(api.Cmd);
+    }).catch((error) => {
+      this.logger.error(error);
+    });
+  }
+
+  async AttackAnyResource() {
+    const api = { Cmd: "world.createEvent", Params: { "RoleArmyID": this.#ServiceManager.roleArmy.GetRoleArmyID.bind(this.#ServiceManager.roleArmy, 1), "DestPos": this.#ServiceManager.GetSecondResource.bind(this.#ServiceManager, 1), "Params": { "Status": 25, "Num": 0, "Back": 1, "Idx": 1 } }, Describe: '创建部队调动事件' };
+    await this.DoTask(api, [this.#ServiceManager.roleArmy.UpdateArmyInfo.bind(this.#ServiceManager.roleArmy), this.#ServiceManager.roleHero.UpdateHeroInfo.bind(this.#ServiceManager.roleHero), this.#ServiceManager.roleArmy.OnArmyCallback.bind(this.#ServiceManager.roleArmy)]).then(async () => {
+      await this.WaitForResponse(api.Cmd, this.#ServiceManager.roleArmy);
     }).catch((error) => {
       this.logger.error(error);
     });
@@ -337,7 +394,8 @@ class Client {
 
   async HeartSync() {
     const api = { Cmd: 'role.heartSync', Params: {}, Describe: '心跳同步' };
-    await this.DoTask(api).then(() => {
+    await this.DoTask(api).then(async () => {
+      await this.WaitForResponse(api.Cmd);
     }).catch((error) => {
       this.logger.error(error);
     });
@@ -356,8 +414,101 @@ class Client {
     } else {
       pos = cityID * 100;
     }
-    const api = { Cmd: "world.createEvents", Params: { "RoleArmyIDs": RoleArmyIDs, "DestPos": pos, "Params": { "Status": status, "Num": -1, "Back": 1, "Automatic": 0, "TargetPos": 0 } }, Describe: '创建部队调动事件' };
-    await this.DoTask(api, [this.#ServiceManager.roleArmy.UpdateArmyInfo.bind(this.#ServiceManager.roleArmy), this.#ServiceManager.roleHero.UpdateHeroInfo.bind(this.#ServiceManager.roleHero)]).then(async () => {
+    const api = { Cmd: "world.createEvents", Params: { "RoleArmyIDs": RoleArmyIDs, "DestPos": pos, "Params": { "Status": status, "Num": -1, "Back": 1, "Automatic": 0, "TargetPos": 0 } }, Describe: '创建部队调动事件', Immediate: true };
+    await this.DoTask(api, [this.#ServiceManager.roleArmy.UpdateArmyInfo.bind(this.#ServiceManager.roleArmy), this.#ServiceManager.roleHero.UpdateHeroInfo.bind(this.#ServiceManager.roleHero), this.#ServiceManager.roleArmy.OnArmyCallback.bind(this.#ServiceManager.roleArmy)]).then(async () => {
+      await this.WaitForResponse(api.Cmd, this.#ServiceManager.roleArmy);
+    }).catch((error) => {
+      this.logger.error(error);
+    });
+  }
+
+  async ResourceAction(status, cityID = 0) {
+    var RoleArmyIDs = [];
+    if (status == 12) {
+      RoleArmyIDs = this.#ServiceManager.roleArmy.GetAllGuardRoleArmyIDs.bind(this.#ServiceManager.roleArmy);
+    } else {
+      RoleArmyIDs = this.#ServiceManager.roleArmy.GetAllRoleArmyIDs.bind(this.#ServiceManager.roleArmy);
+    }
+    var pos = 0;
+    if (cityID == 0) {
+      pos = this.#ServiceManager.GetNextAttackCity.bind(this.#ServiceManager);
+    } else {
+      pos = cityID * 100;
+    }
+    const api = { Cmd: "world.createEvents", Params: { "RoleArmyIDs": RoleArmyIDs, "DestPos": pos + 1, "Params": { "Status": status, "Num": -1, "Back": 1, "Automatic": 0, "TargetPos": 0, "Idx": 1 } }, Describe: '创建部队调动事件', Immediate: true };
+    await this.DoTask(api, [this.#ServiceManager.roleArmy.UpdateArmyInfo.bind(this.#ServiceManager.roleArmy), this.#ServiceManager.roleHero.UpdateHeroInfo.bind(this.#ServiceManager.roleHero), this.#ServiceManager.roleArmy.OnArmyCallback.bind(this.#ServiceManager.roleArmy)]).then(async () => {
+      await this.WaitForResponse(api.Cmd, this.#ServiceManager.roleArmy);
+    }).catch((error) => {
+      this.logger.error(error);
+    });
+  }
+
+  async SkillActivateSkill(heroID) {
+    const api = { Cmd: "skill.activateSkill", Params: { RoleHeroID: this.#ServiceManager.roleHero.GetRoleHeroID.bind(this.#ServiceManager.roleHero, heroID) }, Describe: "传授战法" }
+    await this.DoTask(api).then(async () => {
+      await this.WaitForResponse(api.Cmd);
+    }).catch((error) => {
+      this.logger.error(error);
+    });
+  }
+
+  async RemakeHero(heroID, heroID1, heroId2) {
+    const api = { Cmd: "roleHero.remakeHero", Params: { RoleHeroID: this.#ServiceManager.roleHero.GetRoleHeroID.bind(this.#ServiceManager.roleHero, heroID), HeroList: [this.#ServiceManager.roleHero.GetRoleHeroID.bind(this.#ServiceManager.roleHero, heroID1), this.#ServiceManager.roleHero.GetRoleHeroID.bind(this.#ServiceManager.roleHero, heroId2)] }, Describe: '兵种改造' };
+    await this.DoTask(api).then(async () => {
+      await this.WaitForResponse(api.Cmd);
+    }).catch((error) => {
+      this.logger.error(error);
+    });
+  }
+
+  async UpgradeSkill(heroID, pos) {
+    const api = { Cmd: "skill.upgradeSkill", Params: { RoleHeroID: this.#ServiceManager.roleHero.GetRoleHeroID.bind(this.#ServiceManager.roleHero, heroID), Pos: pos, Describe: "升级技能" } };
+    await this.DoTask(api).then(async () => {
+      await this.WaitForResponse(api.Cmd);
+    }).catch((error) => {
+      this.logger.error(error);
+    });
+  }
+
+  async WorldSweep(armyID, level) {
+    const api = { Cmd: "world.sweep", Params: { RoleArmyID: this.#ServiceManager.roleArmy.GetRoleArmyID.bind(this.#ServiceManager.roleArmy, armyID), Level: level }, Describe: "扫荡山贼" };
+    await this.DoTask(api).then(async () => {
+      await this.WaitForResponse(api.Cmd);
+    }).catch((error) => {
+      this.logger.error(error);
+    });
+  }
+
+  async AssignSolider(armyID) {
+    const api = { Cmd: "army.assignSoldiers", Params: { RoleArmyID: this.#ServiceManager.roleArmy.GetRoleArmyID.bind(this.#ServiceManager.roleArmy, armyID), ManagerNum: 0, SecondNum: 0, ThirdNum: 0 }, Describe: "补兵" };
+    await this.DoTask(api).then(async () => {
+      await this.WaitForResponse(api.Cmd);
+    }).catch((error) => {
+      this.logger.error(error);
+    });
+  }
+
+  async ChangeArm(armyID, armType) {
+    const api = { Cmd: "army.changeArm", Params: { RoleArmyID: this.#ServiceManager.roleArmy.GetRoleArmyID.bind(this.#ServiceManager.roleArmy, armyID), ArmType: armType }, Describe: '变更兵种' };
+    await this.DoTask(api).then(async () => {
+      await this.WaitForResponse(api.Cmd);
+    }).catch((error) => {
+      this.logger.error(error);
+    });
+  }
+
+  async ChangeFormation(armyID, formationID) {
+    const api = { Cmd: "army.changeFormation", Params: { RoleArmyID: this.#ServiceManager.roleArmy.GetRoleArmyID.bind(this.#ServiceManager.roleArmy, armyID), FormationID: formationID }, Describe: '更新阵型' };
+    await this.DoTask(api).then(async () => {
+      await this.WaitForResponse(api.Cmd);
+    }).catch((error) => {
+      this.logger.error(error);
+    });
+  }
+
+  async AssignPoint(heroID) {
+    const api = { Cmd: "roleHero.assignPoint", Params: { RoleHeroID: this.#ServiceManager.roleHero.GetRoleHeroID.bind(this.#ServiceManager.roleHero, heroID), Strength: 0, Chief: 0, Strategy: 50, Speed: 0, Politics: 0 }, Describe: '分配自由点' };
+    await this.DoTask(api).then(async () => {
       await this.WaitForResponse(api.Cmd);
     }).catch((error) => {
       this.logger.error(error);
@@ -386,6 +537,7 @@ class Client {
 
   async Execute() {
     if (this.OrderList.length === 0) {
+      await WorkerManager.TerminatePool();
       this.#SocketHandler.Close();
       return;
     }
@@ -403,7 +555,8 @@ class Client {
 
   async TimedExecute(Method) {
     if (typeof this[Method] === 'function') {
-      setInterval(() => {
+      setInterval(async () => {
+        await this.WaitForResponse(api.Cmd);
         this[Method](1);
       }, 60000);
     }
@@ -426,7 +579,8 @@ class Client {
             BeforeHandler,
             DelayTime,
             IsInvalid,
-            Immediate
+            Immediate,
+            DelayService
           } = Task;
           var nowInvalid = false;
           if (IsInvalid && typeof IsInvalid === "function") {
@@ -441,7 +595,7 @@ class Client {
             Handler,
             ErrHandler
           );
-          await this.WaitForResponse(Cmd, DelayTime);
+          await this.WaitForResponse(Cmd, DelayService);
 
         }
       } catch (e) {
@@ -519,30 +673,35 @@ class Client {
     });
   }
 
-  async WaitForResponse(Cmd, DelayTime = 0) {
+  async WaitForResponse(Cmd, DelayService = null) {
     return new Promise((resolve) => {
       // let maxWaitTimeoutId;
       const checkResponse = async () => {
         if (this.#SocketHandler._messageCode === 0) {
-          if (Cmd === 'world.createEvent' || Cmd === 'world.createEvents') {
-            if (!this.#ServiceManager.roleArmy.CheckArmyStatus.bind(this.#ServiceManager.roleArmy)()) {
-              setTimeout(checkResponse, 50);
-            } else {
-              // clearTimeout(maxWaitTimeoutId);
-              setTimeout(() => resolve(), 100);
-            }
-          } else {
-            resolve();
+          // 若有延迟任务
+          if (DelayService) {
+            await new Promise((delayResolve) => {
+              this.logger.info(
+                `${Cmd} hit wait: ${DelayService ? DelayService.GetDelay() : 10
+                }`
+              );
+              WorkerManager.ExecAsEmit(
+                "wait",
+                [{ Delay: DelayService ? DelayService.GetDelay() : 10 }],
+                {
+                  on: ((payload) => {
+                    if (payload.status === true) {
+                      delayResolve();
+                    }
+                  }).bind(this),
+                }
+              );
+            });
           }
+          resolve();
         } else {
           setTimeout(checkResponse, 50);
         }
-        // if (!maxWaitTimeoutId && DelayTime > 0) {
-        //   maxWaitTimeoutId = setTimeout(() => {
-        //     this.#SocketHandler._messageCode === 0;
-        //     resolve('Max wait time reached');
-        //   }, DelayTime);
-        // }
       };
       checkResponse();
     });
